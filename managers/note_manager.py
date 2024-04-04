@@ -45,3 +45,11 @@ class NoteManager:
     def save_notes(self) -> None:
         self.json_storage.save([note.to_json() for note in self.notes])
         self.csv_storage.save([note.to_csv() for note in self.notes])
+    
+    def show_note(self, note_id: str) -> None:
+        for note in self.notes:
+            if note.id == note_id:
+                print(f"Title: {note.title}\nContent:\n{note.content}")
+                return
+        raise NoteNotFoundException(f"Заметка с ID {note_id} не найдена.")
+

@@ -9,16 +9,19 @@ class NoteApp:
         self.manager = NoteManager()
 
     def setup_argparse(self) -> None:
+        """Отображает доступные команды и примеры их использования."""
         print("Доступные команды: create, edit, delete, list, exit")
         print("Примеры использования:")
         print("  - Создать заметку: create 'Заголовок' 'Содержимое'")
         print("  - Редактировать заметку: edit 'ID' 'Новый заголовок' 'Новое содержимое'")
         print("  - Удалить заметку: delete 'ID'")
         print("  - Показать все заметки: list")
+        print("  - Показать заметку: show 'ID'")
         print("  - Справка: help")
         print("  - Выйти: exit")
 
     def process_command(self, command: str, arguments: List[str]) -> None:
+        """Обрабатывает команды, введенные пользователем."""
         try:
             if command == 'create' and len(arguments) >= 2:
                 title, content = arguments[0], ' '.join(arguments[1:])
@@ -33,6 +36,8 @@ class NoteApp:
                 print("Заметка успешно удалена.")
             elif command == 'list':
                 self.manager.list_notes()
+            elif command == 'show' and len(arguments) == 1:
+                self.manager.show_note(arguments[0])
             elif command == 'help':
                 self.setup_argparse()
             elif command == 'exit':
@@ -48,14 +53,11 @@ class NoteApp:
             print(f"Неожиданная ошибка: {e}")
 
     def run(self) -> None:
+        """Запускает приложение, обрабатывая пользовательский ввод."""
         self.setup_argparse()
         while True:
             try:
                 user_input = input("\nВведите команду: ").strip().split(maxsplit=1)
-                if not user_input:
-                    print("Необходимо ввести команду.")
-                    continue
-
                 command = user_input[0]
                 arguments = user_input[1].split(' ') if len(user_input) > 1 else []
                 self.process_command(command, arguments)

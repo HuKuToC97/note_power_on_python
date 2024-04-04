@@ -5,12 +5,14 @@ import uuid
 
 @dataclass
 class Note:
+    """Класс, представляющий заметку."""
     title: str
     content: str
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     last_modified: datetime = field(default_factory=datetime.now)
 
     def to_json(self):
+        """Сериализует объект в JSON."""
         return {
             'title': self.title,
             'content': self.content,
@@ -19,10 +21,12 @@ class Note:
         }
 
     def to_csv(self) -> str:
+        """Сериализует объект в строку CSV."""
         return f"{self.id};{self.title};{self.content};{self.last_modified.isoformat()}"
 
     @staticmethod
     def from_json(data):
+        """Создает объект из JSON."""
         return Note(
             title=data['title'],
             content=data['content'],
