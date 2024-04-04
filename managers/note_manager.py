@@ -1,6 +1,6 @@
 # managers/note_manager.py
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 from models.note import Note
 from storages.json_storage import JsonStorage
 from storages.csv_storage import CsvStorage
@@ -45,9 +45,22 @@ class NoteManager:
         self.notes = [note for note in self.notes if note.id != note_id]
         self.save_notes()
 
-    def list_notes(self) -> None:
-        for note in self.notes:
-            print(f"ID: {note.id}, Title: {note.title}, Last Modified: {note.last_modified.strftime('%Y-%m-%d %H:%M:%S')}")
+    def list_notes(self, sort: Optional[str] = None, reverse: bool = False) -> None:
+        """Выводит список заметок с возможной сортировкой.
+
+        Аргументы:
+            sort (Optional[str]): Критерий сортировки ('create' или 'modif').
+            reverse (bool): Флаг для сортировки по убыванию.
+        """
+        if sort == 'create':
+            sorted_notes = sorted(self.notes, key=lambda note: note.create_date, reverse=reverse)
+        elif sort == 'modif':
+            sorted_notes = sorted(self.notes, key=lambda note: note.last_modified, reverse=reverse)
+        else:
+            sorted_notes = self.notes
+
+        for note in sorted_notes:
+            print(f"ID: {note.id}, Title: {note.title}, Created: {note.create_date.strftime('%Y-%m-%d %H:%M:%S')}, Last Modified: {note.last_modified.strftime('%Y-%m-%d %H:%M:%S')}")
 
     def save_notes(self) -> None:
         self.json_storage.save([note.to_json() for note in self.notes])
