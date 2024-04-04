@@ -29,6 +29,7 @@ class NoteApp:
         print("  - Показать заметку: show 'ID'")
         print("  - Справка: help")
         print("  - Выйти: exit\n")
+        print("\n!!!ВАЖНО использовать одинарные кавычки там, где это указывается\n")
 
     def process_command(self, command: str, arguments: str) -> None:
         """Обрабатывает команды, введенные пользователем.
@@ -79,7 +80,7 @@ class NoteApp:
                 print("Завершение работы программы.")
                 sys.exit(0)
             else:
-                print("Неизвестная команда или некорректные аргументы. Попробуйте еще раз.")
+                print("Неизвестная команда или некорректные аргументы. Попробуйте еще раз.\nВажно использовать одинарные кавычки там, где это требуется")
         except NoteNotFoundException as e:
             print(f"Ошибка: {e}. Проверьте ID заметки.")
         except FileNotFoundError:
