@@ -13,7 +13,7 @@ class NoteManager:
 
     def load_notes(self) -> List[Note]:
         notes_json = self.json_storage.load()
-        notes = [Note(title=note['title'], content=note['content'], id=note['id'], last_modified=datetime.fromisoformat(note['last_modified'])) for note in notes_json]
+        notes = [Note.from_json(note) for note in notes_json]
         return notes
 
     def create_note(self, title: str, content: str) -> None:
