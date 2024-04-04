@@ -5,7 +5,15 @@ import uuid
 
 @dataclass
 class Note:
-    """Класс, представляющий заметку."""
+    """Класс, представляющий заметку.
+
+    Атрибуты:
+        title (str): Заголовок заметки.
+        content (str): Содержание заметки.
+        id (str): Уникальный идентификатор заметки.
+        create_date (datetime): Дата создания заметки.
+        last_modified (datetime): Дата последнего изменения заметки.
+    """
     title: str
     content: str
     id: str = field(default_factory=lambda: str(uuid.uuid4()))

@@ -3,6 +3,11 @@ import csv
 from typing import List
 
 class CsvStorage:
+    """Класс для работы с хранилищем заметок в формате CSV.
+
+    Атрибуты:
+        file_path (str): Путь к файлу хранилища.
+    """
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
 

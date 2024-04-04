@@ -6,7 +6,13 @@ from exceptions import NoteNotFoundException
 from managers.note_manager import NoteManager
 
 class NoteApp:
+    """Класс приложения для управления заметками через консольный интерфейс.
+
+    Атрибуты:
+        manager (NoteManager): Менеджер заметок для выполнения операций.
+    """
     def __init__(self) -> None:
+        """Инициализация приложения с созданием экземпляра менеджера заметок."""
         self.manager = NoteManager()
 
     def setup_argparse(self) -> None:
@@ -22,7 +28,12 @@ class NoteApp:
         print("  - Выйти: exit")
 
     def process_command(self, command: str, arguments: str) -> None:
-        """Обрабатывает команды, введенные пользователем."""
+        """Обрабатывает команды, введенные пользователем.
+
+        Аргументы:
+            command (str): Команда, введенная пользователем.
+            arguments (str): Строка аргументов команды.
+        """
         args = re.findall(r"'([^']*)'", arguments)
         try:
             if command == 'create' and len(args) == 2:

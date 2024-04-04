@@ -7,6 +7,13 @@ from storages.csv_storage import CsvStorage
 from exceptions import NoteNotFoundException
 
 class NoteManager:
+    """Менеджер заметок, отвечающий за управление заметками.
+
+    Атрибуты:
+        json_storage (JsonStorage): Хранилище для заметок в формате JSON.
+        csv_storage (CsvStorage): Хранилище для заметок в формате CSV.
+        notes (List[Note]): Список заметок.
+    """
     def __init__(self, json_file_path: str = 'notes.json', csv_file_path: str = 'notes.csv') -> None:
         self.json_storage = JsonStorage(json_file_path)
         self.csv_storage = CsvStorage(csv_file_path)
