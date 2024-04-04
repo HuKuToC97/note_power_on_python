@@ -1,6 +1,7 @@
 # main.py
-from typing import List
 import sys
+import re
+from typing import List
 from exceptions import NoteNotFoundException
 from managers.note_manager import NoteManager
 
@@ -10,7 +11,7 @@ class NoteApp:
 
     def setup_argparse(self) -> None:
         """Отображает доступные команды и примеры их использования."""
-        print("Доступные команды: create, edit, delete, list, exit")
+        print("Доступные команды: create, edit, delete, list, exit\n Важно использовать одинарные ковычки там где это указывается")
         print("Примеры использования:")
         print("  - Создать заметку: create 'Заголовок' 'Содержимое'")
         print("  - Редактировать заметку: edit 'ID' 'Новый заголовок' 'Новое содержимое'")
@@ -20,24 +21,25 @@ class NoteApp:
         print("  - Справка: help")
         print("  - Выйти: exit")
 
-    def process_command(self, command: str, arguments: List[str]) -> None:
+    def process_command(self, command: str, arguments: str) -> None:
         """Обрабатывает команды, введенные пользователем."""
+        args = re.findall(r"'([^']*)'", arguments)
         try:
-            if command == 'create' and len(arguments) >= 2:
-                title, content = arguments[0], ' '.join(arguments[1:])
+            if command == 'create' and len(args) == 2:
+                title, content = args
                 self.manager.create_note(title, content)
                 print("Заметка успешно создана.")
-            elif command == 'edit' and len(arguments) >= 3:
-                note_id, new_title, new_content = arguments[0], arguments[1], ' '.join(arguments[2:])
+            elif command == 'edit' and len(args) == 3:
+                note_id, new_title, new_content = args
                 self.manager.edit_note(note_id, new_title, new_content)
                 print("Заметка успешно отредактирована.")
-            elif command == 'delete' and len(arguments) == 1:
-                self.manager.delete_note(arguments[0])
+            elif command == 'delete' and len(args) == 1:
+                self.manager.delete_note(args[0])
                 print("Заметка успешно удалена.")
             elif command == 'list':
                 self.manager.list_notes()
-            elif command == 'show' and len(arguments) == 1:
-                self.manager.show_note(arguments[0])
+            elif command == 'show' and len(args) == 1:
+                self.manager.show_note(args[0])
             elif command == 'help':
                 self.setup_argparse()
             elif command == 'exit':
@@ -53,13 +55,13 @@ class NoteApp:
             print(f"Неожиданная ошибка: {e}")
 
     def run(self) -> None:
-        """Запускает приложение, обрабатывая пользовательский ввод."""
+        """Запускает приложение, обрабатывая пользовательский ввод."""        
         self.setup_argparse()
         while True:
             try:
-                user_input = input("\nВведите команду: ").strip().split(maxsplit=1)
+                user_input = input("\nВведите команду: ").strip().split(' ', 1)
                 command = user_input[0]
-                arguments = user_input[1].split(' ') if len(user_input) > 1 else []
+                arguments = user_input[1] if len(user_input) > 1 else ''
                 self.process_command(command, arguments)
             except IndexError as e:
                 print(f"Ошибка обработки команды: {e}")

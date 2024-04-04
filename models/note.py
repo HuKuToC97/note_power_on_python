@@ -9,6 +9,7 @@ class Note:
     title: str
     content: str
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    create_date: datetime = field(default_factory=datetime.now)
     last_modified: datetime = field(default_factory=datetime.now)
 
     def to_json(self):
@@ -17,12 +18,12 @@ class Note:
             'title': self.title,
             'content': self.content,
             'id': self.id,
+            'create': self.create_date.isoformat(),
             'last_modified': self.last_modified.isoformat()
         }
 
     def to_csv(self) -> str:
-        """Сериализует объект в строку CSV."""
-        return f"{self.id};{self.title};{self.content};{self.last_modified.isoformat()}"
+        return f"{self.id};{self.title};{self.content};{self.create_date.isoformat()};{self.last_modified.isoformat()}"
 
     @staticmethod
     def from_json(data):
@@ -31,5 +32,7 @@ class Note:
             title=data['title'],
             content=data['content'],
             id=data['id'],
+            create_date=datetime.fromisoformat(data['create']),
             last_modified=datetime.fromisoformat(data['last_modified'])
         )
+
