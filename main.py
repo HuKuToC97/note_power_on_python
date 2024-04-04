@@ -1,6 +1,7 @@
 # main.py
 from typing import List
 import sys
+from exceptions import NoteNotFoundException
 from managers.note_manager import NoteManager
 
 class NoteApp:
@@ -39,8 +40,12 @@ class NoteApp:
                 sys.exit(0)
             else:
                 print("Неизвестная команда или некорректные аргументы. Попробуйте еще раз.")
+        except NoteNotFoundException as e:
+            print(f"Ошибка: {e}. Проверьте ID заметки.")
+        except FileNotFoundError:
+            print("Ошибка: Файл данных не найден.")
         except Exception as e:
-            print(f"Ошибка: {e}")
+            print(f"Неожиданная ошибка: {e}")
 
     def run(self) -> None:
         self.setup_argparse()

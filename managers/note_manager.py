@@ -4,6 +4,7 @@ from typing import List
 from models.note import Note
 from storages.json_storage import JsonStorage
 from storages.csv_storage import CsvStorage
+from exceptions import NoteNotFoundException
 
 class NoteManager:
     def __init__(self, json_file_path: str = 'notes.json', csv_file_path: str = 'notes.csv') -> None:
@@ -21,7 +22,6 @@ class NoteManager:
         self.notes.append(note)
         self.save_notes()
 
-
     def edit_note(self, note_id: str, new_title: str, new_content: str) -> None:
         for note in self.notes:
             if note.id == note_id:
@@ -30,9 +30,11 @@ class NoteManager:
                 note.last_modified = datetime.now()
                 self.save_notes()
                 return
-        raise ValueError("Note ID not found.")
+        raise NoteNotFoundException(f"Заметка с ID {note_id} не найдена.")
 
     def delete_note(self, note_id: str) -> None:
+        if not any(note.id == note_id for note in self.notes):
+            raise NoteNotFoundException(f"Заметка с ID {note_id} не найдена.")
         self.notes = [note for note in self.notes if note.id != note_id]
         self.save_notes()
 
